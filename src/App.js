@@ -60,7 +60,7 @@ const App = () => {
   React.useEffect(() => {
     const url = 'https://newsapi.org/v2/top-headlines?' +
               'country=' + country + '&' +
-              'apiKey=fd3137543cde4878a4ab77aebe5bc94c';
+              'apiKey=2df259c96a4b405fbb75e14986f3c1f5'; //  fd3137543cde4878a4ab77aebe5bc94c
     const req = new Request(url);
     fetch(req)
       .then(response => {
@@ -75,19 +75,28 @@ const App = () => {
 
   const CBtn = props => {
     const flag = {
+      "gb": "🇬🇧",
       "fr": "🇫🇷",
       "de": "🇩🇪",
+      "in": "🇮🇳",
+      "sg": "🇸🇬",
       "cn": "🇨🇳",
       "kr": "🇰🇷",
       "jp": "🇯🇵",
+      "au": "🇦🇺",
       "us": "🇺🇸",
       "ca": "🇨🇦",
     };
+    const style = (props.co === country) ? {background: "Khaki"} : undefined;
     return <button type="button"
-      disabled={country === props.co}
-      onClick={()=>setCountry(props.co)}
-      className="btn-ctr"><span role="img" aria-label={props.co}>{flag[props.co]}</span></button>;
+                   onClick={()=>setCountry(props.co)}
+                   className="btn-ctr"
+                   style={style}
+                 >
+        <span role="img" aria-label={props.co}>{flag[props.co]}</span>
+      </button>;
   }
+  // disabled={country === props.co}
 
   const isWestern = !["ch", "kr", "jp"].includes(country);
 
@@ -95,11 +104,15 @@ const App = () => {
     <div className="App">
       <div className="btn-cont">
         <MasonryHeader title="NEWS" sub="" />
+        <CBtn co="gb" />
         <CBtn co="fr" />
         <CBtn co="de" />
+        <CBtn co="in" />
+        <CBtn co="sg" />
         <CBtn co="cn" />
         <CBtn co="kr" />
         <CBtn co="jp" />
+        <CBtn co="au" />
         <CBtn co="us" />
         <CBtn co="ca" />
       </div>
