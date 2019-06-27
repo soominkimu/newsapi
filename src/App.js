@@ -7,12 +7,12 @@ const MasonryHeader = props =>
   </div>;
 
 const MasonryItem = props => {
-  const getBkColor    = diffDays => {
-    if (diffDays <= 30) {
-      return `rgba(231, 76, 60, ${.4+.6*(30-diffDays)/30})`
-    } else if (diffDays <= 366/2) {
+  const getBkColor = diffHrs => {
+    if (diffHrs <= 3) {
+      return `rgba(231, 76, 60, ${.4+.6*(3-diffHrs)/3})`
+    } else if (diffHrs <= 6) {
       return `rgba(0, 100, 0, .6)`
-    } else if (diffDays <= 366) {
+    } else if (diffHrs <= 12) {
       return `rgba(0, 0, 100, .6)`
     } else {
       return `rgba(0, 0, 0, .6)`
@@ -20,8 +20,9 @@ const MasonryItem = props => {
   };
   const mon_name = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const dt = new Date(props.publishedAt);
-  const diffDays = Math.ceil(( Date.now() - dt.getTime() ) / (1000 * 60 * 60 * 24));
-  let bgc = getBkColor(diffDays);
+  const lZ = n => (n < 10) ? '0' + n : n.toString();
+  const bgc = getBkColor(Math.ceil(( Date.now() - dt.getTime() ) / (1000 * 60 * 60)));
+  const mo_dd = (props.en ? (mon_name[dt.getMonth()] + ' ') : ((dt.getMonth()+1) + '/') ) + dt.getDate();
 
   return (
     <div className="masonry-item">
@@ -29,15 +30,19 @@ const MasonryItem = props => {
         <div className="masonry-img">
           <a href={props.url} target="_blank" rel="noopener noreferrer">
             <div className="date-stamp" style={{backgroundColor: bgc}}>
-              <div className="date-mon-dd">{mon_name[dt.getMonth()] + '.' + dt.getDate()}</div>
-              <div className="date-year">{dt.getFullYear()}</div>
+              <div className="date-hh-mm">{lZ(dt.getHours()) + ':' + lZ(dt.getMinutes())}</div>
+              <div className="date-mo-dd">{mo_dd}</div>
             </div>
             <img src={props.urlToImage} alt="" />
           </a>
         </div>
         <div className="masonry-text">
-          <h3 className="masonry-title">{props.title}
-            {props.author && <span className="masonry-nb">{props.author}</span>}
+          <h3 className="masonry-title">
+            {props.source.name &&
+              <div className="masonry-nb tooltip">{props.source.name}
+                {props.author && <span className="tooltiptext">{props.author}</span>}
+              </div>}
+            {props.title}
           </h3>
           <p className="masonry-description">{props.description}</p>
         </div>
@@ -70,13 +75,13 @@ const App = () => {
 
   const CBtn = props => {
     const flag = {
-      "us": "🇺🇸",
-      "ca": "🇨🇦",
-      "jp": "🇯🇵",
-      "kr": "🇰🇷",
-      "ch": "🇨🇳",
       "fr": "🇫🇷",
       "de": "🇩🇪",
+      "cn": "🇨🇳",
+      "kr": "🇰🇷",
+      "jp": "🇯🇵",
+      "us": "🇺🇸",
+      "ca": "🇨🇦",
     };
     return <button type="button"
       disabled={country === props.co}
@@ -84,13 +89,15 @@ const App = () => {
       className="btn-ctr"><span role="img" aria-label={props.co}>{flag[props.co]}</span></button>;
   }
 
+  const isWestern = !["ch", "kr", "jp"].includes(country);
+
   return (contents &&
     <div className="App">
       <div className="btn-cont">
-        <MasonryHeader title="World News" sub="" />
+        <MasonryHeader title="NEWS" sub="" />
         <CBtn co="fr" />
         <CBtn co="de" />
-        <CBtn co="ch" />
+        <CBtn co="cn" />
         <CBtn co="kr" />
         <CBtn co="jp" />
         <CBtn co="us" />
@@ -98,7 +105,7 @@ const App = () => {
       </div>
       <div className="masonry-wrapper">
         <div className="masonry">
-          { contents.articles.map((cts, i) => <MasonryItem key = {i} {...cts} /> ) }
+          { contents.articles.map((cts, i) => <MasonryItem key={i} en={isWestern} {...cts} /> ) }
         </div>
       </div>
     </div>
