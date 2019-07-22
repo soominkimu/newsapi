@@ -1,6 +1,8 @@
 import React from 'react';
 import './App.scss';
 
+console.log = () => {}
+
 const MasonryHeader = props =>
   <div className="masonry-header">{props.title}
     <span className="masonry-header-sub">{props.sub}</span>
@@ -73,6 +75,8 @@ const App = () => {
   if (contents)
     console.log(contents);
 
+  const FLAGS = ["gb", "fr", "de", "in", "sg", "cn", "kr", "jp", "au", "us", "ca"];
+
   const CBtn = props => {
     const flag = {
       "gb": "🇬🇧",
@@ -85,7 +89,7 @@ const App = () => {
       "jp": "🇯🇵",
       "au": "🇦🇺",
       "us": "🇺🇸",
-      "ca": "🇨🇦",
+      "ca": "🇨🇦"
     };
     const style = (props.co === country) ? {background: "Khaki"} : undefined;
     return <button type="button"
@@ -104,17 +108,7 @@ const App = () => {
     <div className="App">
       <div className="btn-cont">
         <MasonryHeader title="NEWS" sub="" />
-        <CBtn co="gb" />
-        <CBtn co="fr" />
-        <CBtn co="de" />
-        <CBtn co="in" />
-        <CBtn co="sg" />
-        <CBtn co="cn" />
-        <CBtn co="kr" />
-        <CBtn co="jp" />
-        <CBtn co="au" />
-        <CBtn co="us" />
-        <CBtn co="ca" />
+        {FLAGS.map( (co, i) => <CBtn key={i} co={co} />)}
       </div>
       <div className="masonry-wrapper">
         <div className="masonry">
