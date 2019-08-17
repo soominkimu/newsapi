@@ -24,7 +24,8 @@ const MasonryItem = props => {
   const dt = new Date(props.publishedAt);
   const lZ = n => (n < 10) ? '0' + n : n.toString();
   const bgc = getBkColor(Math.ceil(( Date.now() - dt.getTime() ) / (1000 * 60 * 60)));
-  const mo_dd = (props.en ? (mon_name[dt.getMonth()] + ' ') : ((dt.getMonth()+1) + '/') ) + dt.getDate();
+  const mo_dd = (props.en ? (mon_name[dt.getMonth()] + ' ') :
+                            ((dt.getMonth()+1) + '/') ) + dt.getDate();
 
   return (
     <div className="masonry-item">
